@@ -1,0 +1,50 @@
+<div class="container">
+  <h1 class="heading">Manage Users</h1>
+  <button mat-raised-button color="primary" title="Add User" routerLink="../users/add">
+    <mat-icon>add</mat-icon>
+    Add User
+  </button>
+  <div class="mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+
+    <table mat-table [dataSource]="users" class="table-container" matSort matSortActive="id" matSortDirection="desc" matSortDisableClear>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+        <mat-cell *matCellDef="let user">{{user.id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let user">{{user.name}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+        <mat-cell *matCellDef="let user">{{user.email}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <button mat-icon-button type="button" color="accent" (click)="viewUserDialog(user)" title="View">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button type="button" color="primary" routerLink="../users/edit/{{ user.id }}" title="Edit" *ngIf="(curruser['id'] != user.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button type="button" color="warn" (click)="deleteDialog(user)" title="Delete" *ngIf="(curruser['id'] != user.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </table>
+
+    <!-- <mat-paginator [length]="resultsLength" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+  </div>
+</div>

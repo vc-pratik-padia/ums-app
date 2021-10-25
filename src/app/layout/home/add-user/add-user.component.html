@@ -1,0 +1,60 @@
+<div class="container">
+  <h1 class="heading">Add User</h1>
+
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+  </div>
+
+  <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()" class="form">
+    <mat-form-field class="form-element">
+      <input type="name" matInput placeholder="Name" formControlName="name" />
+      <mat-error *ngIf="checkError('name', 'required')">
+        Name field is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-element">
+      <input type="email" matInput placeholder="Email" formControlName="email" />
+      <mat-error *ngIf="checkError('email', 'required')">
+        Email field is required
+      </mat-error>
+      <mat-error *ngIf="checkError('email', 'email')">
+        Enter valid email
+      </mat-error>
+      <mat-error *ngIf="checkError('email', 'exist')">
+        Email address is already taken
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-element">
+      <input type="text" matInput placeholder="Username" formControlName="username">
+      <mat-error *ngIf="checkError('username', 'required')">
+        Username field is required
+      </mat-error>
+      <mat-error *ngIf="checkError('username', 'min')">
+        Username must be 5 characters long
+      </mat-error>
+      <mat-error *ngIf="checkError('username', 'exist')">
+        Username is already taken
+      </mat-error>
+      <mat-error *ngIf="checkError('username', 'pattern')">
+        Aplhanumeric and Underscore(-) are allowed
+      </mat-error>
+
+
+    </mat-form-field>
+
+    <label id="radio-group-label">Select Role</label>
+    <mat-radio-group class="radio-group" formControlName="role">
+      <mat-radio-button class="radio-button" *ngFor="let role of roles" [value]="role">
+        {{ role | titlecase }}
+      </mat-radio-button>
+    </mat-radio-group>
+
+    <div class="form-element">
+      <button mat-raised-button color="primary" type="submit" class="button m-r-10" [disabled]="!addUserForm.valid || isSubmitted">Save</button>
+      <button mat-raised-button mat-button-base type="button" class="button" routerLink="../../">Cancel</button>
+    </div>
+
+  </form>
+</div>
