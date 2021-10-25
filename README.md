@@ -3,7 +3,9 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.13.
 
 ## Development server
-First installed all the local dependencies using `npm i` and run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+First run **mock-data-server** server to get support of API. Kinddly go through [mock-data-server]https://github.com/vc-pratik-padia/mock-data-server for more about.
+
+Install local dependencies using `npm i` and run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Further help
 
