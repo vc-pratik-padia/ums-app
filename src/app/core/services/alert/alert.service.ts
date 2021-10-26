@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlertService {
-  private duraton: number = 5;
-  constructor(
-    private snackBar: MatSnackBar
-  ) { }
+  private duraton = 5;
+  constructor(private snackBar: MatSnackBar) {}
 
   /**
    * To show toastr message
@@ -17,7 +15,7 @@ export class AlertService {
    */
   showMessage(message: string, action: string = 'dismiss') {
     this.snackBar.open(message, action, {
-      duration: (this.duraton * 1000)
+      duration: this.duraton * 1000,
     });
   }
 }

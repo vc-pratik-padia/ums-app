@@ -7,22 +7,24 @@ import { Observable } from 'rxjs/internal/Observable';
   providedIn: 'root'
 })
 export class AuthService {
-
+  /**
+   * @param userService UserService Object
+   */
   constructor(
-    private userService: UserService,
+    private userService: UserService
   ) { }
 
   /**
    * Get logged in user data from local storage if present otherwise false will be return
    * @returns Returns logged in user data from localstorage. In case user no logged in false will be return.
    */
-  getLoggedInUserInfo(): User | string | boolean {
-    let user = localStorage.getItem('user');
-    if (user) {
-      user = JSON.parse(atob(user));
+  getLoggedInUserInfo(): User {
+    const encodedString = localStorage.getItem('user');
+    if (encodedString) {
+      const user: User = JSON.parse(atob(encodedString));
       return user;
     } else {
-      return false;
+      return {} as User;
     }
   }
 

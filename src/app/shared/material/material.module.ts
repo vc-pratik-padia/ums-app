@@ -7,11 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table'
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [],
@@ -28,7 +29,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
-    MatRadioModule
+    MatRadioModule,
+    MatMenuModule
   ],
   exports: [
     MatSliderModule,
@@ -43,7 +45,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatPaginatorModule,
     MatSortModule,
     MatDialogModule,
-    MatRadioModule
+    MatRadioModule,
+    MatMenuModule
   ]
 })
 export class MaterialModule { }

@@ -13,15 +13,15 @@ export class TokenInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService
-  ) {}
+  ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const user = this.authService.getLoggedInUserInfo();
 
     // If user logged in then add 'username' field in every request as Authorization header
-    if (user) {
+    if (user.id) {
       request = request.clone({
-        headers: request.headers.set('Authorization', user['username'])
+        headers: request.headers.set('Authorization', user.username)
       });
     }
 

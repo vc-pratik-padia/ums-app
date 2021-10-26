@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from "@env";
+import { environment } from '@env';
 import { Observable, pipe, throwError } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { catchError } from 'rxjs/operators';
-import { User } from "../../../models/users/user";
-import { apiRoutes } from '../../constants/endpoins'
+import { User } from '../../../models/users/user';
+import { apiRoutes } from '../../constants/endpoins';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,8 @@ export class UserService {
    * @param user User interface
    */
   storeUserInfo(user: User): void {
-    const string = btoa(JSON.stringify(user));
-    localStorage.setItem('user', string);
+    const encodedString = btoa(JSON.stringify(user));
+    localStorage.setItem('user', encodedString);
   }
 
   /**
@@ -30,7 +30,7 @@ export class UserService {
    * @param params Query string parameters
    * @returns List of users will be returend
    */
-  getUsers(params: Object): Observable<User[]> {
+  getUsers(params: object): Observable<User[]> {
     const finalParams = this.generateParams(params);
     return this.httpClient.get<User[]>(environment.apiEndPoint + apiRoutes.getUsers, {
       params: finalParams
@@ -48,7 +48,7 @@ export class UserService {
    */
   findUserBy(type: string, value: string): Observable<User[]> {
     const params = new HttpParams().set(type, value);
-    return this.httpClient.get<User[]>(environment.apiEndPoint + apiRoutes.getUsers, {params}).pipe(
+    return this.httpClient.get<User[]>(environment.apiEndPoint + apiRoutes.getUsers, { params }).pipe(
       catchError(error => throwError(error)),
       map((response: User[]) => response)
     );
@@ -60,10 +60,10 @@ export class UserService {
    * @returns Boolean value will be return based on success operation
    */
   deleteUser(id: number): Observable<boolean> {
-    const url: string = `${environment.apiEndPoint}${apiRoutes.deleteUser.replace(':id', id.toString())}`;
+    const url = `${environment.apiEndPoint}${apiRoutes.deleteUser.replace(':id', id.toString())}`;
     return this.httpClient.delete<boolean>(url).pipe(
       catchError(error => throwError(error)),
-      map((response: Object) => (Object.keys(response).length === 0))
+      map((response: {}) => (Object.keys(response).length === 0))
     );
   }
 
@@ -72,15 +72,15 @@ export class UserService {
    * @param params User fields
    * @returns returns user object if successfully added. In case of error false will be return.
    */
-  storeUser(params: Object): Observable<User | Boolean> {
-    return this.httpClient.post<User | Boolean>(environment.apiEndPoint + apiRoutes.storeUser, params, {
+  storeUser(params: object): Observable<User | boolean> {
+    return this.httpClient.post<User | boolean>(environment.apiEndPoint + apiRoutes.storeUser, params, {
       headers: {
         'Content-Type': 'application/json',
       }
     }).pipe(
       catchError(error => throwError(error)),
       map((response: User) => response?.id ? response : false)
-    )
+    );
   }
 
   /**
@@ -89,16 +89,16 @@ export class UserService {
    * @param params fields needs to be update
    * @returns returns user object if successfully updated. In case of error false will be return.
    */
-  updateUser(id: number, params: Object): Observable<User | Boolean> {
-    const url: string = `${environment.apiEndPoint}${apiRoutes.updateUser.replace(':id', id.toString())}`;
-    return this.httpClient.patch<User | Boolean>(url, params, {
+  updateUser(id: number, params: object): Observable<User | boolean> {
+    const url = `${environment.apiEndPoint}${apiRoutes.updateUser.replace(':id', id.toString())}`;
+    return this.httpClient.patch<User | boolean>(url, params, {
       headers: {
         'Content-Type': 'application/json',
       }
     }).pipe(
       catchError(error => throwError(error)),
       map((response: User) => response?.id ? response : false)
-    )
+    );
   }
 
   /**
@@ -106,11 +106,13 @@ export class UserService {
    * @param params query params
    * @returns returns HttpParams object
    */
-  generateParams(params: Object): HttpParams {
+  generateParams(params: object): HttpParams {
     let httpParams = new HttpParams();
-    for(let key in params) {
-      httpParams = httpParams.append(key, params[key]);
-    }
+
+    Object.keys(params).forEach(item => {
+      httpParams = httpParams.append(item, params[item]);
+    });
+
     return httpParams;
   }
 }

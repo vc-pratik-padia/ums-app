@@ -2,7 +2,14 @@
   <span class="m-r-10">User Management System</span>
   <button mat-button routerLink="/" routerLinkActive="active-link">Users</button>
   <span class="spacer"></span>
-  <button mat-icon-button class="favorite-icon" title="Logout" (click)="logout()">
-    <mat-icon>exit_to_app</mat-icon>
+  <button mat-button [matMenuTriggerFor]="navUserMenu">
+    {{ user.name }}
+    <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
+  <mat-menu #navUserMenu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      Logout
+    </button>
+  </mat-menu>
 </mat-toolbar>

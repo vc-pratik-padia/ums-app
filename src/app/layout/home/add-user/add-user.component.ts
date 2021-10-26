@@ -6,6 +6,7 @@ import { UniqueUserValidatorService } from 'src/app/shared/unique-user-validator
 import { Roles } from 'src/app/core/constants/roles';
 import { UserService } from 'src/app/core/services/users/user.service';
 import { finalize } from 'rxjs/operators';
+import { UtilityService } from 'src/app/core/services/utility/utility.service';
 
 @Component({
   selector: 'app-add-user',
@@ -14,27 +15,35 @@ import { finalize } from 'rxjs/operators';
 })
 export class AddUserComponent {
   addUserForm: FormGroup;
-  isSubmitted: boolean = false;
-  isLoading: boolean = false;
+  isSubmitted = false;
+  isLoading = false;
   roles: string[] = Roles;
+  checkError: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private uniqueUserValidator: UniqueUserValidatorService,
     private userService: UserService,
     private alertService: AlertService,
+    private utilityService: UtilityService,
     private router: Router
   ) {
     this.addUserForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email], this.uniqueUserValidator.unique('email')],
-      username: ['', [Validators.required, Validators.min(5), Validators.pattern(/^[\w\-]+$/)], this.uniqueUserValidator.unique('username')],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.min(5),
+          Validators.pattern(/^[\w\-]+$/)
+        ],
+        this.uniqueUserValidator.unique('username')
+      ],
       role: ['', [Validators.required]]
     });
-  }
 
-  checkError(control: string, validationType: string): boolean {
-    return (this.addUserForm.get(control).invalid && (this.addUserForm.get(control).dirty || this.addUserForm.get(control).touched) && this.addUserForm.get(control).errors[validationType]);
+    this.checkError = this.utilityService.checkError;
   }
 
   onSubmit(): void {
@@ -50,7 +59,7 @@ export class AddUserComponent {
       )
       .subscribe(
         (inserted) => {
-          if(inserted) {
+          if (inserted) {
             this.router.navigate(['../']);
             this.alertService.showMessage('User has been added successfully');
           } else {

@@ -16,12 +16,13 @@ import { UniqueUserValidatorService } from 'src/app/shared/unique-user-validator
   styleUrls: ['./edit-user.component.css']
 })
 export class EditUserComponent implements OnInit {
-  id: number = 0;
-  currUser: User | boolean | string;
+  id: number;
+  currUser: User;
   editUserForm: FormGroup;
-  isSubmitted: boolean = false;
-  isLoading: boolean = false;
+  isSubmitted = false;
+  isLoading = false;
   roles: string[] = Roles;
+  checkError: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,7 +30,7 @@ export class EditUserComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private alertService: AlertService,
-    private utilityService:UtilityService,
+    private utilityService: UtilityService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -41,35 +42,41 @@ export class EditUserComponent implements OnInit {
       username: ['', [Validators.required, Validators.min(5), Validators.pattern(/^[\w\-]+$/)]],
       role: ['', [Validators.required]]
     });
+
+    this.checkError = this.utilityService.checkError;
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    if(!this.id || this.id == this.currUser['id']) {
+    this.id = Number(this.route.snapshot.params.id);
+
+    if (isNaN(this.id)) {
+      this.router.navigate(['../']);
+      this.alertService.showMessage('No entity found');
+      return;
+    }
+
+    if (!this.id || (this.id === this.currUser.id)) {
       this.router.navigate(['../']);
       this.alertService.showMessage('Not authorised');
+      return;
     }
 
     this.userService.findUserBy('id', this.id.toString())
-    .subscribe(users => {
-      if(users.length === 0) {
-        this.router.navigate(['../']);
-        this.alertService.showMessage('No entity found');
-      } else {
-        this.editUserForm.controls.email.setAsyncValidators(this.uniqueUserValidator.unique('email', users[0]['email']));
-        if(this.currUser['role'] === 'admin') {
-          this.editUserForm.controls.username.setAsyncValidators([this.uniqueUserValidator.unique('username', users[0]['username'])]);
+      .subscribe(users => {
+        if (users.length === 0) {
+          this.router.navigate(['../']);
+          this.alertService.showMessage('No entity found');
+        } else {
+          this.editUserForm.controls.email.setAsyncValidators(this.uniqueUserValidator.unique('email', users[0].email));
+          if (this.currUser.role === 'admin') {
+            this.editUserForm.controls.username.setAsyncValidators([this.uniqueUserValidator.unique('username', users[0].username)]);
+          }
+          this.editUserForm.patchValue(users[0]);
         }
-        this.editUserForm.patchValue(users[0]);
-      }
-    }, () => {
-      this.router.navigate(['../']);
-      this.alertService.showMessage('Something went wrong');
-    });
-  }
-
-  checkError(control: string, validationType: string): boolean {
-    return (this.editUserForm.get(control).invalid && (this.editUserForm.get(control).dirty || this.editUserForm.get(control).touched) && this.editUserForm.get(control).errors[validationType]);
+      }, () => {
+        this.router.navigate(['../']);
+        this.alertService.showMessage('Something went wrong');
+      });
   }
 
   onSubmit(): void {
@@ -79,13 +86,13 @@ export class EditUserComponent implements OnInit {
     this.userService.updateUser(this.id, params)
       .pipe(
         finalize(() => {
-          this.isLoading = false
+          this.isLoading = false;
           this.isSubmitted = false;
         })
       )
       .subscribe(
         (updated) => {
-          if(updated) {
+          if (updated) {
             this.router.navigate(['../']);
             this.alertService.showMessage('User has been updated successfully');
           } else {

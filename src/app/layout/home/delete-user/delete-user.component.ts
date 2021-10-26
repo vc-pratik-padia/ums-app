@@ -13,9 +13,6 @@ export class DeleteUserComponent {
     private selfDialogRef: MatDialogRef<DeleteUserComponent>
   ) { }
 
-  ngOnInit(): void {
-  }
-
   onConfirmClick() {
     this.selfDialogRef.close(1);
   }

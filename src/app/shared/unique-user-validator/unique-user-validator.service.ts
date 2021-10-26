@@ -18,13 +18,13 @@ export class UniqueUserValidatorService {
     private userService: UserService
   ) { }
 
-  unique(type: string, initialValue: string = ""): AsyncValidatorFn {
+  unique(type: string, initialValue: string = ''): AsyncValidatorFn {
     return (
       control: AbstractControl
     ):
       | Promise<{ [key: string]: any } | null>
       | Observable<{ [key: string]: any } | null> => {
-      if (control.value == "" || control.value.length === 0) {
+      if (control.value === '' || control.value.length === 0) {
         return of(null);
       } else if (control.value === initialValue) {
         return of(null);
