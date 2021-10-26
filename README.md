@@ -7,6 +7,14 @@ First run **mock-data-server** server to get support of API. Kinddly go through 
 
 Install local dependencies using `npm i` and run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+## Credentials
+Intial stage use below mentioned credential. Later you can manage users after login.
+
+| Email | Password |
+| ------ | ------ |
+| pratik@yopmail.com | any random string |
+| johnsnow@yopmail.com | any random string |
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
